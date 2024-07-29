@@ -54,7 +54,26 @@ const getNotes = async (req, res) =>{
     res.status(200).send(result);
 }
 
+const deleteNotes = async (req,res) => {
+    const id = req.params.id;
+    
+    try{
+      await client.connect();
+      
+      const collection = db.collection('ToDoList');
+      await collection.deleteOne( {"_id": ObjectId(id)});
+    }catch(err){
+      console.log(err)
+      res.send(404).send("Not Found");
+    }finally{
+      await client.close();
+    }
+  
+    res.status(200).send("OK");
+}
+
 module.exports ={
     createNote: createNote,
-    getNotes: getNotes
+    getNotes: getNotes,
+    deleteNotes: deleteNotes
 }
