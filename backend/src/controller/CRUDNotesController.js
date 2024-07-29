@@ -30,7 +30,7 @@ const createNote = async (req,res) => {
     
     // Fetch the newly added note using the insertedId
     const newNote = await collection.findOne({ _id: response.insertedId });
-    res.json(newNote);
+    res.status(200).json(newNote);
   } catch (err) {
     res.status(500).send("Oops, something went wrong");
   } finally {
@@ -38,6 +38,23 @@ const createNote = async (req,res) => {
   }
 }
 
+const getNotes = async (req, res) =>{
+    let result = [];
+    try {
+      // Connect the client to the server	(optional starting in v4.7)
+      await client.connect();
+
+      const collection = db.collection('ToDoList');
+      result = await collection.find( {}, {}).toArray();
+    } finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+
+    res.status(200).send(result);
+}
+
 module.exports ={
-    createNote: createNote
+    createNote: createNote,
+    getNotes: getNotes
 }

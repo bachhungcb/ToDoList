@@ -17,27 +17,27 @@ app.use(cors());
 app.post("/api/notes", addNotes.createNote);//kho noi
 
 
-app.get("/api/notes", async (req, res) => { //lay cac notes co san tren db
-    let result = [];
-    try {
-      // Connect the client to the server	(optional starting in v4.7)
-      await client.connect();
+// app.get("/api/notes", async (req, res) => { //lay cac notes co san tren db
+//     let result = [];
+//     try {
+//       // Connect the client to the server	(optional starting in v4.7)
+//       await client.connect();
 
-      const collection = db.collection('ToDoList');
-      result = await collection.find( {}, {}).toArray();
-    } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
-    }
+//       const collection = db.collection('ToDoList');
+//       result = await collection.find( {}, {}).toArray();
+//     } finally {
+//       // Ensures that the client will close when you finish/error
+//       await client.close();
+//     }
 
-    res.status(200).send(result);
-});
+//     res.status(200).send(result);
+// });
 
+app.get("/api/notes", addNotes.getNotes);
 
 app.delete("/api/notes/:id", async (req,res)=>{ //xoa mot notes
   const id = req.params.id;
   
-
   try{
     await client.connect();
     
