@@ -72,8 +72,28 @@ const deleteNotes = async (req,res) => {
     res.status(200).send("OK");
 }
 
+const updateNote = async (req,res)=>{
+    const id = req.params.id;
+    const {Title, Content} = req.body;
+  
+    try{
+      await client.connect();
+      const collection = db.collection('ToDoList');
+      const updatedNote = await collection.updateOne( {"_id": ObjectId(id)}, 
+                                  {$set: {Title: Title, Content: Content}});
+      const newlyUpdatedNote = await collection.findOne({"_id": ObjectId(id)});
+      res.status(200).json(newlyUpdatedNote);
+    }catch(err){
+      console.log(err)
+      res.send(404).send("Not Found");
+    }finally{
+      await client.close();
+    }
+}
+
 module.exports ={
     createNote: createNote,
     getNotes: getNotes,
-    deleteNotes: deleteNotes
+    deleteNotes: deleteNotes,
+    updateNote: updateNote
 }
