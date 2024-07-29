@@ -54,8 +54,7 @@ const App = () => {
       );
       
       const newNote = await response.json();
-      console.log(response);
-      console.log(newNote);
+
       setNotes([newNote, ...notes]);
       setTitle("");
       setContent("");
@@ -80,7 +79,6 @@ const App = () => {
     }
 
     const id = selectedNote._id;
-    console.log(selectedNote);
     try{
       const response = await fetch(
         `http://localhost:5000/api/notes/${id}`, 
@@ -95,8 +93,15 @@ const App = () => {
           }),
         }
       );
-      console.log(response);
-      setNotes(notes);
+
+      const updatedNote = await response.json();
+      console.log(updatedNote);
+      const updatedNotesList = notes.map((note) => (note._id === id ? updatedNote : note));
+
+      setNotes(updatedNotesList);
+      setTitle("");
+      setContent("");
+
     } catch(err){
       console.log(err);
     }   

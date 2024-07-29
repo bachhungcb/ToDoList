@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.post("/api/notes", async (req, res) => {
+app.post("/api/notes", async (req, res) => {//them moi mot notes
   const { Title, Content } = req.body;
 
   if (!Title || !Content) {
@@ -81,6 +81,8 @@ app.put("/api/notes/:id", async (req,res)=>{ //thay doi noi dung mot notes
     const collection = db.collection('ToDoList');
     const updatedNote = await collection.updateOne( {"_id": ObjectId(id)}, 
                                 {$set: {Title: Title, Content: Content}});
+    const newlyUpdatedNote = await collection.findOne({"_id": ObjectId(id)});
+    res.json(newlyUpdatedNote);
   }catch(err){
     console.log(err)
     res.send(404).send("Not Found");
@@ -88,7 +90,6 @@ app.put("/api/notes/:id", async (req,res)=>{ //thay doi noi dung mot notes
     await client.close();
   }
 
-  res.status(200).send('Ok');
 })
 
 app.listen(5000, () => {
