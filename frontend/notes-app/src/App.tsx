@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { set } from "react-datepicker/dist/date_utils";
 
 
 interface Note {
@@ -23,14 +24,16 @@ function getDate() {
 
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [Title, setTitle] = useState("");
   const [Content, setContent] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [notes, setNotes] = useState<Note[]>([]);
-  const date = new Date();
+
   useEffect(() => {
 
     const fetchNotes = async() =>{
+      setIsLoading(true);
       try{
         const response = await fetch("http://localhost:5000/api/notes"); //lay data tu BE, default method la GET
         
@@ -42,6 +45,7 @@ const App = () => {
     }
 
     fetchNotes();
+    setIsLoading(false);
   },[]); //Lastly, add an empty dependency array 
          //to ensure that this code only runs once when 
          //the component is first mounted:
@@ -49,7 +53,7 @@ const App = () => {
 
 
   const handleAddNote = async (event: React.FormEvent) => {
-
+    setIsLoading(true);
     try{
       event.preventDefault();
       const response = await fetch(
@@ -72,6 +76,7 @@ const App = () => {
       setNotes([newNote, ...notes]);
       setTitle("");
       setContent("");
+      setIsLoading(false);
     }catch(err){
       console.log(err);
     }
@@ -86,6 +91,7 @@ const App = () => {
   }
 
   const handleUpdateNote = async (event: React.FormEvent) =>{
+    setIsLoading(true);
     event.preventDefault();
 
     if(!selectedNote){
@@ -120,7 +126,7 @@ const App = () => {
     } catch(err){
       console.log(err);
     }   
-
+    setIsLoading(false);
   }
 
   const handleCancel = () =>{
@@ -190,29 +196,23 @@ const App = () => {
         )}
       </form>
       <div className="notes-grid">
+        {isLoading ? <div className="loading">Loading...</div> : null}
         {notes.map((note) => (
-          <div key={note._id} className="notes-item" onClick={() => handleNoteClick(note)}>
-            <div className="notes-header">
-              <button onClick={(event)=>deleteNote(event, note._id)}>x</button>
-            </div>
+            <div key={note._id} className="notes-item" onClick={() => handleNoteClick(note)}>
+              <div className="notes-header">
+                <button onClick={(event) => deleteNote(event, note._id)}>x</button>
+              </div>
 
-            <div>
-              <h2>{note.Title}</h2>
-              <p className="notes-content">{note.Content}</p>
-            </div>
+              <div>
+                <h2>{note.Title}</h2>
+                <p className="notes-content">{note.Content}</p>
+              </div>
 
-            <div>
-              <p className="notes-date">
-                  {/* {new Intl.DateTimeFormat('en-US', { year: 'numeric',
-                                                      month: '2-digit',
-                                                      day: '2-digit', 
-                                                      hour: '2-digit', 
-                                                      minute: '2-digit', 
-                                                      second: '2-digit'})
-                  .format(note.Date)} */}
-                  {note.Date? new Date(note.Date).toLocaleDateString() : getDate()}
+              <div className="notes-footer">
+                <p className="notes-date">
+                  {note.Date ? new Date(note.Date).toLocaleDateString() : getDate()}
                 </p>
-            </div>
+              </div>
           </div>
         ))}
       </div>

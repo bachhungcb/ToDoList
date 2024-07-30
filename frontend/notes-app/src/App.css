@@ -31,6 +31,8 @@ body {
   background-color: #f9f9f9;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  height: fit-content;
+  max-height: 320px;
 }
 
 .notes-item:hover {
@@ -39,13 +41,24 @@ body {
   transition: transform 0.3s ease;
 }
 
+.notes-footer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 40px; /* Adjust as necessary */
+}
+
 .notes-date{
+  margin: 0;
   font-size: 18px;
   font-weight: bold;
   border: 2px solid black;
   border-radius: 5px;
   text-align: center;
+  align-items: center;
   color: #000000;
+  width: fit-content;
+  height: fit-content;
 }
 
 .notes-content{
@@ -94,6 +107,7 @@ h2 {
   gap: 20px;
   border: 5px solid black;
   width: fit-content;
+  height: fit-content;
   padding: 5px;
   border-radius: 5px;
 
@@ -134,4 +148,17 @@ input {
 .edit-buttons button:last-of-type {
   background-color: rgb(220, 89, 89);
   color: white;
+}
+
+.loading {
+  position: fixed; /* or absolute if within a relative parent */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a semi-transparent background */
+  z-index: 9999; /* Ensure it covers other content */
 }
