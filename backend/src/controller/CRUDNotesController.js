@@ -16,8 +16,8 @@ app.use(cors());
 
 /* --------------CREATE NOTE----------------- */
 
-const createNote = async (req,res) => {
-    const { Title, Content } = req.body;
+const createNote = async (req,res) => {//post
+  const { Title, Content, Date } = req.body;
 
   if (!Title || !Content) {
     return res.status(400).json({ message: "Please provide Title and Content" });
@@ -26,7 +26,7 @@ const createNote = async (req,res) => {
   try {
     await client.connect();
     const collection = db.collection('ToDoList');
-    const response = await collection.insertOne({ Title, Content });
+    const response = await collection.insertOne({ Title, Content, Date });
     
     // Fetch the newly added note using the insertedId
     const newNote = await collection.findOne({ _id: response.insertedId });
@@ -38,7 +38,7 @@ const createNote = async (req,res) => {
   }
 }
 
-const getNotes = async (req, res) =>{
+const getNotes = async (req, res) =>{//get
     let result = [];
     try {
       // Connect the client to the server	(optional starting in v4.7)
@@ -54,7 +54,7 @@ const getNotes = async (req, res) =>{
     res.status(200).send(result);
 }
 
-const deleteNotes = async (req,res) => {
+const deleteNotes = async (req,res) => {//delete
     const id = req.params.id;
     
     try{
@@ -72,15 +72,15 @@ const deleteNotes = async (req,res) => {
     res.status(200).send("OK");
 }
 
-const updateNote = async (req,res)=>{
+const updateNote = async (req,res)=>{//put
     const id = req.params.id;
-    const {Title, Content} = req.body;
-  
+    const {Title, Content, Date} = req.body;
+
     try{
       await client.connect();
       const collection = db.collection('ToDoList');
       const updatedNote = await collection.updateOne( {"_id": ObjectId(id)}, 
-                                  {$set: {Title: Title, Content: Content}});
+                                  {$set: {Title: Title, Content: Content, Date: Date}});
       const newlyUpdatedNote = await collection.findOne({"_id": ObjectId(id)});
       res.status(200).json(newlyUpdatedNote);
     }catch(err){

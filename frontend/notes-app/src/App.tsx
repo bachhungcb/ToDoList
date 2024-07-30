@@ -1,6 +1,9 @@
 import { get } from "http";
 import "./App.css";
 import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 
 interface Note {
@@ -22,8 +25,9 @@ function getDate() {
 const App = () => {
   const [Title, setTitle] = useState("");
   const [Content, setContent] = useState("");
-  const [date, setDate] = useState(getDate());
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [notes, setNotes] = useState<Note[]>([]);
+  const date = new Date();
   useEffect(() => {
 
     const fetchNotes = async() =>{
@@ -58,6 +62,7 @@ const App = () => {
           body: JSON.stringify({
             Title,
             Content,
+            Date: startDate,
           }),
         }
       );
@@ -99,12 +104,13 @@ const App = () => {
           body: JSON.stringify({
             Title,
             Content,
+            Date: startDate,
           }),
         }
       );
 
       const updatedNote = await response.json();
-      console.log(updatedNote);
+
       const updatedNotesList = notes.map((note) => (note._id === id ? updatedNote : note));
 
       setNotes(updatedNotesList);
@@ -166,6 +172,14 @@ const App = () => {
           rows={10} required>
         </textarea>
 
+        <DatePicker
+          showIcon
+          selected={startDate} 
+          onChange={date => date && setStartDate(date)} 
+          showTimeSelect
+          dateFormat="Pp"
+        />
+
         {selectedNote ? (
           <div className="edit-button">
             <button type="submit">Save</button>
@@ -188,7 +202,16 @@ const App = () => {
             </div>
 
             <div>
-              <p className="notes-date">{date}</p>
+              <p className="notes-date">
+                  {/* {new Intl.DateTimeFormat('en-US', { year: 'numeric',
+                                                      month: '2-digit',
+                                                      day: '2-digit', 
+                                                      hour: '2-digit', 
+                                                      minute: '2-digit', 
+                                                      second: '2-digit'})
+                  .format(note.Date)} */}
+                  {note.Date? new Date(note.Date).toLocaleDateString() : getDate()}
+                </p>
             </div>
           </div>
         ))}
