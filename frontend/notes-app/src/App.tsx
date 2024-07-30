@@ -122,7 +122,7 @@ const App = () => {
       setNotes(updatedNotesList);
       setTitle("");
       setContent("");
-
+      setSelectedNote(null);
     } catch(err){
       console.log(err);
     }   
@@ -140,6 +140,7 @@ const App = () => {
     noteId: number
   ) => {
     event.stopPropagation();
+    setIsLoading(true);
 
     try {
       await fetch(
@@ -156,6 +157,7 @@ const App = () => {
     } catch (e) {
       console.log(e);
     }
+    setIsLoading(false);
   };
 
 
@@ -187,7 +189,7 @@ const App = () => {
         />
 
         {selectedNote ? (
-          <div className="edit-button">
+          <div className="edit-buttons">
             <button type="submit">Save</button>
             <button onClick={handleCancel}>Cancel</button>
           </div>
