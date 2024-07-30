@@ -1,3 +1,4 @@
+import { get } from "http";
 import "./App.css";
 import { useEffect, useState } from "react";
 
@@ -6,15 +7,23 @@ interface Note {
   _id: number;
   Title: string;  // phai match voi DB
   Content: string;// phai match voi DB
+  Date: Date;
+}
+
+function getDate() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const date = today.getDate();
+  return `${date}/${month}/${year}`;
 }
 
 
 const App = () => {
   const [Title, setTitle] = useState("");
   const [Content, setContent] = useState("");
-
+  const [date, setDate] = useState(getDate());
   const [notes, setNotes] = useState<Note[]>([]);
-
   useEffect(() => {
 
     const fetchNotes = async() =>{
@@ -168,12 +177,19 @@ const App = () => {
       </form>
       <div className="notes-grid">
         {notes.map((note) => (
-          <div key={note._id} className="note-item" onClick={() => handleNoteClick(note)}>
+          <div key={note._id} className="notes-item" onClick={() => handleNoteClick(note)}>
             <div className="notes-header">
               <button onClick={(event)=>deleteNote(event, note._id)}>x</button>
             </div>
-            <h2>{note.Title}</h2>
-            <p>{note.Content}</p>
+
+            <div>
+              <h2>{note.Title}</h2>
+              <p className="notes-content">{note.Content}</p>
+            </div>
+
+            <div>
+              <p className="notes-date">{date}</p>
+            </div>
           </div>
         ))}
       </div>
