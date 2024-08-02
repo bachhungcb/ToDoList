@@ -17,22 +17,25 @@ app.use(cors());
 /* --------------CREATE NOTE----------------- */
 
 const createNote = async (req,res) => {//post
-  const { Title, Content, Date } = req.body;
-
+  const { Title, Content, Date: datestring } = req.body;
+  let date = new Date(datestring);
   if (!Title || !Content) {
     return res.status(400).json({ message: "Please provide Title and Content" });
   }
-
   try {
+
     await client.connect();
     const collection = db.collection('ToDoList');
-    const response = await collection.insertOne({ Title, Content, Date });
+    const response = await collection.insertOne({ Title: Title, 
+                                                  Content: Content,   
+                                                  Date: date
+                                                });
     
     // Fetch the newly added note using the insertedId
     const newNote = await collection.findOne({ _id: response.insertedId });
     res.status(200).json(newNote);
   } catch (err) {
-    res.status(500).send("Oops, something went wrong");
+    res.status(500).send(err);
   } finally {
     await client.close();
   }
@@ -74,13 +77,13 @@ const deleteNotes = async (req,res) => {//delete
 
 const updateNote = async (req,res)=>{//put
     const id = req.params.id;
-    const {Title, Content, Date} = req.body;
-
+    const {Title, Content, Date: datestring} = req.body;
+    let date = new Date(datestring);
     try{
       await client.connect();
       const collection = db.collection('ToDoList');
       const updatedNote = await collection.updateOne( {"_id": ObjectId(id)}, 
-                                  {$set: {Title: Title, Content: Content, Date: Date}});
+                                  {$set: {Title: Title, Content: Content, Date: date}});
       const newlyUpdatedNote = await collection.findOne({"_id": ObjectId(id)});
       res.status(200).json(newlyUpdatedNote);
     }catch(err){
