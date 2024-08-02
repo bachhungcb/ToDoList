@@ -18,15 +18,16 @@ app.use(cors());
 /* --------------GET NOTE----------------- */
 const getNotesFromDay = async (req, res) => {
     // Get the current date in ISO string format and extract the date part
-    const event = new Date().toISOString();
-    const startTime = new Date(event);
-    startTime.setHours(0,0,0,0);
-    const endTime = new Date(event);
-    endTime.setHours(0,0,0,0);
+    const {Date: datestring} = req.body;
+    let date = datestring;
 
-    console.log(startTime);
-    console.log(typeof(startTime));
-    console.log(endTime);
+
+    const startTime = new Date(date);
+    startTime.setHours(0,0,0,0);
+
+
+    const endTime = new Date(date);
+    endTime.setHours(23,59,59,999);
 
     try {
         await client.connect();
@@ -38,7 +39,6 @@ const getNotesFromDay = async (req, res) => {
                     $lt: endTime 
                 }
             }).toArray(); 
-        console.log(response);
         res.status(200).send(response);
     } catch (err) {
         console.error(err);
