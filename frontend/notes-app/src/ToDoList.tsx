@@ -35,7 +35,7 @@ const ToDoList = () => {
     const fetchNotes = async() =>{
       setIsLoading(true);
       try{
-        const response = await fetch("http://localhost:5000/api/notes"); //lay data tu BE, default method la GET
+        const response = await fetch("http://localhost:5000/app/notes"); //lay data tu BE, default method la GET
         
         const notes: Note[] = await response.json();
         setNotes(notes);
@@ -57,7 +57,7 @@ const ToDoList = () => {
     try{
       event.preventDefault();
       const response = await fetch(
-        "http://localhost:5000/api/notes",
+        "http://localhost:5000/app/notes",
         {
           method:"POST",
           headers:{
@@ -101,7 +101,7 @@ const ToDoList = () => {
     const id = selectedNote._id;
     try{
       const response = await fetch(
-        `http://localhost:5000/api/notes/${id}`, 
+        `http://localhost:5000/app/notes/${id}`, 
         {
           method: "PUT",
           headers:{
@@ -144,7 +144,7 @@ const ToDoList = () => {
 
     try {
       await fetch(
-        `http://localhost:5000/api/notes/${noteId}`,
+        `http://localhost:5000/app/notes/${noteId}`,
         {
           method: "DELETE",
         }
