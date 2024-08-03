@@ -1,10 +1,8 @@
-import { get } from "http";
 import "../css/Home.css";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
-import { set } from "react-datepicker/dist/date_utils";
+
 
 
 interface Note {
@@ -23,7 +21,7 @@ function getDate() {
 }
 
 
-const Aaaa = () => {
+const Inbox = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [Title, setTitle] = useState("");
   const [Content, setContent] = useState("");
@@ -34,8 +32,11 @@ const Aaaa = () => {
 
     const fetchNotes = async() =>{
       setIsLoading(true);
+
       try{
-        const response = await fetch("http://localhost:5000/app/notes"); //lay data tu BE, default method la GET
+        const response = await fetch(
+                                "http://localhost:5000/app/notes",
+                                ); //lay data tu BE, default method la GET
         
         const notes: Note[] = await response.json();
         setNotes(notes);
@@ -243,4 +244,4 @@ const Aaaa = () => {
   );
 };
 
-export default Aaaa;
+export default Inbox;

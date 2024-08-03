@@ -13,8 +13,8 @@ import AnnualReport from "./pages/annual";
 import Teams from "./pages/team";
 import Blogs from "./pages/blogs";
 import SignUp from "./pages/signup";
-import Aaaa from "./pages/Home";
-
+import Inbox from "./pages/Inbox";
+import Today from "./pages/Today";
 
 function App(){
   return(
@@ -22,10 +22,10 @@ function App(){
     <NavBar/>
       <Routes>
                 <Route path="/" element={<Home/>} />
-                <Route path="/about" element={<Aaaa/>} />
+                <Route path="/inbox" element={<Inbox/>} />
                 <Route
-                    path="/events"
-                    element={<Events />}
+                    path="/today"
+                    element={<Today />}
                 />
                 <Route
                     path="/annual"

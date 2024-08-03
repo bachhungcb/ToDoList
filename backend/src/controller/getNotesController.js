@@ -18,15 +18,12 @@ app.use(cors());
 /* --------------GET NOTE----------------- */
 const getNotesFromDay = async (req, res) => {
     // Get the current date in ISO string format and extract the date part
-    const {Date: datestring} = req.body;
-    let date = datestring;
-
-
-    const startTime = new Date(date);
+    const {date: datestring} = req.query;
+    const startTime = new Date(datestring);
     startTime.setHours(0,0,0,0);
 
 
-    const endTime = new Date(date);
+    const endTime = new Date(datestring);
     endTime.setHours(23,59,59,999);
 
     try {

@@ -20,11 +20,11 @@ const Navbar = () => {
                     <NavLink to="/">
                         Home
                     </NavLink>
-                    <NavLink to="/about" >
-                        About
+                    <NavLink to="/inbox">
+                        Inbox
                     </NavLink>
-                    <NavLink to="/events" activeStyle>
-                        Events
+                    <NavLink to="/today" activeStyle>
+                        Today
                     </NavLink>
                     <NavLink to="/annual" activeStyle>
                         Annual Report
