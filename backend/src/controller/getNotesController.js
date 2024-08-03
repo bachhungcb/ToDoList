@@ -14,8 +14,10 @@ app.use(express.json());
 app.use(cors());
 /* --------------INIT SETTINGS----------------- */
 
-
+let connectionCount = 0; // Define a counter variable
 /* --------------GET NOTE----------------- */
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const getNotesFromDay = async (req, res) => {
     // Get the current date in ISO string format and extract the date part
     const {date: datestring} = req.query;
@@ -29,6 +31,9 @@ const getNotesFromDay = async (req, res) => {
 
     try {
         await client.connect();
+        connectionCount++; // Increment the counter on each connection
+        console.log(`Number of connections made: ${connectionCount}`); // Log the connection count
+
         const collection = db.collection('ToDoList');
         const response = await collection
             .find({
@@ -40,9 +45,11 @@ const getNotesFromDay = async (req, res) => {
         res.status(200).send(response);
     } catch (err) {
         console.error(err);
+        await client.close();
         res.status(500).send(err);
     } finally {
         await client.close();
+        connectionCount = 0
     }
 };
 

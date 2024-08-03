@@ -1,5 +1,5 @@
 import "../css/Home.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -27,13 +27,16 @@ const Inbox = () => {
   const [Content, setContent] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [notes, setNotes] = useState<Note[]>([]);
-
+  const fetchCountRef = useRef<number>(0); // Ref for counter
   useEffect(() => {
 
     const fetchNotes = async() =>{
       setIsLoading(true);
 
       try{
+        fetchCountRef.current++; // Increment counter
+        console.log(`fetchNotes has been called ${fetchCountRef.current} times`); // Log counter value
+
         const response = await fetch(
                                 "http://localhost:5000/app/notes",
                                 ); //lay data tu BE, default method la GET
@@ -42,11 +45,13 @@ const Inbox = () => {
         setNotes(notes);
       }catch(err){
         console.log(err);
+      }finally{
+        setIsLoading(false);
       }
     }
 
     fetchNotes();
-    setIsLoading(false);
+
   },[]); //Lastly, add an empty dependency array 
          //to ensure that this code only runs once when 
          //the component is first mounted:
