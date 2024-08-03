@@ -1,5 +1,4 @@
 import React from "react";
-import ToDoList from "./ToDoList";
 import NavBar from './components/NavBar'
 import "./App.css";
 import {
@@ -14,6 +13,7 @@ import AnnualReport from "./pages/annual";
 import Teams from "./pages/team";
 import Blogs from "./pages/blogs";
 import SignUp from "./pages/signup";
+import Aaaa from "./pages/Home";
 
 
 function App(){
@@ -21,8 +21,8 @@ function App(){
   <Router>
     <NavBar/>
       <Routes>
-                <Route path="/" element={<ToDoList/>} />
-                <Route path="/about" element={<ToDoList/>} />
+                <Route path="/" element={<Home/>} />
+                <Route path="/about" element={<Aaaa/>} />
                 <Route
                     path="/events"
                     element={<Events />}
