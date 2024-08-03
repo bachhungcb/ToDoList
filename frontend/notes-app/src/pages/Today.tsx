@@ -30,7 +30,7 @@ const Today = () => {
 
             try {
                 const date = new Date().toISOString();
-                const response = await fetch(`http://localhost:5000/app/today?date=${encodeURIComponent(date)}`, {
+                const response = await fetch(`http://localhost:5000/app/today?date=${date}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
@@ -40,6 +40,7 @@ const Today = () => {
                 }
     
                 const notes: Note[] = await response.json();
+                console.log(notes);
                 setNotes(notes);
             } catch (error) {
                 if (error instanceof Error) {
@@ -79,17 +80,17 @@ const Today = () => {
         <div className="app-container">
             <div className="notes-grid">
                 {isLoading ? <div className="loading">Loading...</div> : null}
-                {notes.map((note, index) => (
+                {notes.filter(note => note !== null && note !== undefined).map((note, index) => (
                     <div key={note._id} className="notes-item">
                         <div className="notes-header">
                             {/* Optionally add buttons or other controls here */}
                         </div>
-
+    
                         <div>
                             <h2>{note.Title}</h2>
                             <p className="notes-content">{note.Content}</p>
                         </div>
-
+    
                         <div className="notes-footer">
                             <p className="notes-date">
                                 {note.Date ? new Date(note.Date).toLocaleDateString() : getDate()}

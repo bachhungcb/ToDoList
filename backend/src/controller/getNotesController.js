@@ -24,11 +24,11 @@ const getNotesFromDay = async (req, res) => {
     const startTime = new Date(datestring);
     console.log(datestring);
     startTime.setHours(0,0,0,0);
-
+    
 
     const endTime = new Date(datestring);
     endTime.setHours(23,59,59,999);
-
+    console.log(endTime);
     try {
         await client.connect();
         connectionCount++; // Increment the counter on each connection
@@ -41,15 +41,21 @@ const getNotesFromDay = async (req, res) => {
                     $gte: startTime, 
                     $lt: endTime 
                 }
-            }).toArray(); 
+            }).toArray();
         res.status(200).send(response);
     } catch (err) {
         console.error(err);
         await client.close();
         res.status(500).send(err);
     } finally {
-        await client.close();
-        connectionCount = 0
+        if (client) {
+            try {
+                await client.close();
+                console.log("Connection closed");
+            } catch (closeErr) {
+                console.error("Error closing connection:", closeErr);
+            }
+        }
     }
 };
 
