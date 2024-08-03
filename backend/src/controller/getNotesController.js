@@ -20,6 +20,7 @@ const getNotesFromDay = async (req, res) => {
     // Get the current date in ISO string format and extract the date part
     const {date: datestring} = req.query;
     const startTime = new Date(datestring);
+    console.log(datestring);
     startTime.setHours(0,0,0,0);
 
 
