@@ -2,11 +2,9 @@
 const express = require("express");
 require('dotenv').config()
 const cors = require("cors");
-const client = require('../config/databaseConfig.js');//kho noi
 const { ObjectId } = require("mongodb");
 
-const dbName = process.env.DB_NAME;
-const db = client.db(dbName);
+const { getDb } = require('../config/databaseConfig.js');
 
 const app = express();
 
@@ -23,8 +21,7 @@ const createNote = async (req,res) => {//post
     return res.status(400).json({ message: "Please provide Title and Content" });
   }
   try {
-
-    await client.connect();
+    const db = getDb();
     const collection = db.collection('ToDoList');
     const response = await collection.insertOne({ Title: Title, 
                                                   Content: Content,   
@@ -36,8 +33,6 @@ const createNote = async (req,res) => {//post
     res.status(200).json(newNote);
   } catch (err) {
     res.status(500).send(err);
-  } finally {
-    await client.close();
   }
 }
 
@@ -45,13 +40,12 @@ const getNotes = async (req, res) =>{//get
     let result = [];
     try {
       // Connect the client to the server	(optional starting in v4.7)
-      await client.connect();
+      const db = getDb();
 
       const collection = db.collection('ToDoList');
       result = await collection.find( {}, {}).toArray();
-    } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
+    }catch(err){
+      console.log(err);
     }
 
     res.status(200).send(result);
@@ -61,15 +55,13 @@ const deleteNotes = async (req,res) => {//delete
     const id = req.params.id;
     
     try{
-      await client.connect();
+      const db = getDb();
       
       const collection = db.collection('ToDoList');
       await collection.deleteOne( {"_id": ObjectId(id)});
     }catch(err){
       console.log(err)
       res.send(404).send("Not Found");
-    }finally{
-      await client.close();
     }
   
     res.status(200).send("OK");
@@ -80,7 +72,7 @@ const updateNote = async (req,res)=>{//put
     const {Title, Content, Date: datestring} = req.body;
     let date = new Date(datestring);
     try{
-      await client.connect();
+      const db = getDb();
       const collection = db.collection('ToDoList');
       const updatedNote = await collection.updateOne( {"_id": ObjectId(id)}, 
                                   {$set: {Title: Title, Content: Content, Date: date}});
@@ -89,8 +81,6 @@ const updateNote = async (req,res)=>{//put
     }catch(err){
       console.log(err)
       res.send(404).send("Not Found");
-    }finally{
-      await client.close();
     }
 }
 
