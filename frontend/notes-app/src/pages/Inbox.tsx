@@ -1,4 +1,5 @@
-import "../css/Inbox.css";
+import React from "react";
+import "../css/Inbox.css"
 import { useEffect, useState, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
