@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
-const { connectToDatabase } = require('./src/config/databaseConfig.js'); // Adjust the path as needed
+const { connectToDatabase } = require('./src/config/databaseConfig.js');
 const notesRouter = require('./src/routes/CRUDRoutes.js');
 const getNotesRouter = require('./src/routes/getNotesRoutes.js');
 const PORT = process.env.PORT || 5000;

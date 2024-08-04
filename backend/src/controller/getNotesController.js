@@ -3,9 +3,7 @@ const express = require("express");
 require('dotenv').config()
 const cors = require("cors");
 const { ObjectId } = require("mongodb");
-
 const { getDb } = require('../config/databaseConfig.js');
-
 
 const app = express();
 app.use(express.json());
@@ -37,7 +35,6 @@ const getNotesFromDay = async (req, res) => {
     }
   };
   
-
 module.exports = {
     getNotesFromDay: getNotesFromDay
 }
