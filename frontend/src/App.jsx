@@ -1,12 +1,14 @@
-import logo from './logo.svg';
-import axios from 'axios';
-import './App.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+import axios from 'axios'
 
 function App() {
-  useEffect(() =>{
-    const fetchHelloWorld = async()  =>{
-      const res = await axios.get("http://localhost:5000/app/notes");
+  const [count, setCount] = useState(0)
+  useEffect(()=>{
+    const fetchHelloWorld = async () =>{
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/app/notes`)
       console.log(">>check res: ", res);
     }
     fetchHelloWorld();
@@ -15,7 +17,7 @@ function App() {
     <>
       Hello World
     </>
-  );
+  )
 }
 
-export default App;
+export default App
