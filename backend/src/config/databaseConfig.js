@@ -1,25 +1,16 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const uri = process.env.MONGODB_URI;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-let db;
-
+// Connect to MongoDB using Mongoose
 const connectToDatabase = async () => {
   try {
-    await client.connect();
-    db = client.db(process.env.DB_NAME);
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,  // Timeout after 5s instead of 30s
+    });
     console.log("Connected successfully to MongoDB server");
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error);
@@ -27,11 +18,16 @@ const connectToDatabase = async () => {
   }
 };
 
-const getDb = () => {
-  if (!db) {
-    throw new Error("Database not connected");
-  }
-  return db;
-};
+// Example Mongoose Schema and Model
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  age: { type: Number, default: 18 },
+}, {
+  timestamps: true,  // Automatically create `createdAt` and `updatedAt`
+});
 
-module.exports = { connectToDatabase, getDb };
+// Create a model from the schema
+const User = mongoose.model('User', userSchema);
+
+module.exports = { connectToDatabase, User };
