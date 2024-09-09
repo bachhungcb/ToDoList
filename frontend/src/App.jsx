@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import axios from 'axios'
+import axios from './util/axios.customize'
 
 function App() {
-  const [count, setCount] = useState(0)
   useEffect(()=>{
     const fetchHelloWorld = async () =>{
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/app/notes`)
+      const res = await axios.get(`/app/notes`)
       console.log(">>check res: ", res);
     }
     fetchHelloWorld();
