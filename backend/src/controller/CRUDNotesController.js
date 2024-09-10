@@ -5,6 +5,7 @@ const cors = require("cors");
 const { ObjectId } = require("mongodb");
 const { getDb } = require('../config/databaseConfig.js');
 const app = express();
+const Notes = require('../model/notes.model.js');
 
 app.use(express.json());
 app.use(cors());
@@ -36,16 +37,20 @@ const createNote = async (req,res) => {//post
 
 const getNotes = async (req, res) =>{//get
     let result = [];
-    try {
-      // Connect the client to the server	(optional starting in v4.7)
-      const db = getDb();
+    // try {
+    //   // Connect the client to the server	(optional starting in v4.7)
+    //   const db = getDb();
 
-      const collection = db.collection('ToDoList');
-      result = await collection.find( {}, {}).toArray();
+    //   const collection = db.collection('ToDoList');
+    //   result = await collection.find( {}, {}).toArray();
+    // }catch(err){
+    //   console.log(err);
+    // }
+    try{
+      result = await Notes.find({});
     }catch(err){
       console.log(err);
     }
-
     res.status(200).send(result);
 }
 

@@ -5,7 +5,8 @@ let usersSchema = new mongoose.Schema({
     email: String, 
     password: String,
     role: String
-})
-const Users = mongoose.model('Users', usersSchema)
+});
+
+const Users = mongoose.model('users', usersSchema)
 
 module.exports = Users;

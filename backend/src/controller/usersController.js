@@ -2,8 +2,6 @@
 const express = require("express");
 require('dotenv').config()
 const cors = require("cors");
-const { ObjectId } = require("mongodb");
-const { getDb } = require('../config/databaseConfig.js');
 const { createUsersService } = require("../services/usersService.js");
 
 const app = express();
