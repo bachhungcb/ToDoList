@@ -6,7 +6,7 @@ const { ObjectId } = require("mongodb");
 const { getDb } = require('../config/databaseConfig.js');
 const app = express();
 const Notes = require('../model/notes.model.js');
-const {createNotesService} = require('../services/notesService.js');
+const {createNotesService, deleteNotesService} = require('../services/notesService.js');
 
 app.use(express.json());
 app.use(cors());
@@ -16,13 +16,11 @@ app.use(cors());
 
 const createNote = async (req,res) => {//post
   const { Title, Content, Date: datestring } = req.body;
-  let date = new Date(datestring);
   if (!Title || !Content) {
     return res.status(400).json({ message: "Please provide Title and Content" });
   }
   try {
     const response = await createNotesService(Title, Content, datestring);
-
     // Fetch the newly added note using the insertedId
     //const newNote = await collection.findOne({ _id: response.insertedId });
     res.status(200).json(response);
@@ -41,21 +39,22 @@ const getNotes = async (req, res) =>{//get
     res.status(200).send(result);
 }
 
-const deleteNotes = async (req,res) => {//delete
-    const id = req.params.id;
-    
-    try{
-      const db = getDb();
-      
-      const collection = db.collection('ToDoList');
-      await collection.deleteOne( {"_id": ObjectId(id)});
-    }catch(err){
-      console.log(err)
-      res.send(404).send("Not Found");
+const deleteNotes = async (req, res) => {
+  const id = req.params.id;
+  let result;
+  try {
+    result = await deleteNotesService(id);
+    if (result) {
+      return res.status(200).send(`Deleted: ${result}`);
+    } else {
+      return res.status(400).send("Error");
     }
-  
-    res.status(200).send("OK");
-}
+  } catch (err) {
+    console.log(err);
+    return res.status(404).send("Not Found");
+  }
+};
+
 
 const updateNote = async (req,res)=>{//put
     const id = req.params.id;

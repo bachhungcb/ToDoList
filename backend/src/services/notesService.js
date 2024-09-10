@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const Notes = require('../model/notes.model');
 
 const createNotesService = async(title, content, date) => {
@@ -15,6 +16,22 @@ const createNotesService = async(title, content, date) => {
     }
 }
 
+const deleteNotesService = async (id) =>{
+    try{
+        const result = await Notes.findByIdAndDelete(id);
+        return result;
+    }catch(err){
+        console.log(err);
+        return null;
+    }
+}
+
+const updateNotesService = async () =>{
+
+}
+
 module.exports = {
-    createNotesService
+    createNotesService,
+    deleteNotesService,
+    updateNotesService
 }
