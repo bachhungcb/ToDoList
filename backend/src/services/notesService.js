@@ -26,8 +26,19 @@ const deleteNotesService = async (id) =>{
     }
 }
 
-const updateNotesService = async () =>{
+const updateNotesService = async (id, title, content, date) =>{
+    inputedDate = date? date: Date.now();
+    try{   
+        const result = await Notes.findByIdAndUpdate(id, {
+            title: title, 
+            content: content,
+            date: inputedDate
+        })
+        return result;
 
+    }catch(err){
+        console.log(err);
+    }
 }
 
 module.exports = {

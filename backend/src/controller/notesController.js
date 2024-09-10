@@ -2,11 +2,11 @@
 const express = require("express");
 
 const cors = require("cors");
-const { ObjectId } = require("mongodb");
+
 const { getDb } = require('../config/databaseConfig.js');
 const app = express();
 const Notes = require('../model/notes.model.js');
-const {createNotesService, deleteNotesService} = require('../services/notesService.js');
+const {createNotesService, deleteNotesService, updateNotesService} = require('../services/notesService.js');
 
 app.use(express.json());
 app.use(cors());
@@ -15,12 +15,12 @@ app.use(cors());
 /* --------------CREATE NOTE----------------- */
 
 const createNote = async (req,res) => {//post
-  const { Title, Content, Date: datestring } = req.body;
-  if (!Title || !Content) {
-    return res.status(400).json({ message: "Please provide Title and Content" });
+  const { title, content, Date: datestring } = req.body;
+  if (!title || !content) {
+    return res.status(400).json({ message: "Please provide title and content" });
   }
   try {
-    const response = await createNotesService(Title, Content, datestring);
+    const response = await createNotesService(title, content, datestring);
     // Fetch the newly added note using the insertedId
     //const newNote = await collection.findOne({ _id: response.insertedId });
     res.status(200).json(response);
@@ -58,15 +58,10 @@ const deleteNotes = async (req, res) => {
 
 const updateNote = async (req,res)=>{//put
     const id = req.params.id;
-    const {Title, Content, Date: datestring} = req.body;
-    let date = new Date(datestring);
+    const {title, content, date: datestring} = req.body;
     try{
-      const db = getDb();
-      const collection = db.collection('ToDoList');
-      const updatedNote = await collection.updateOne( {"_id": ObjectId(id)}, 
-                                  {$set: {Title: Title, Content: Content, Date: date}});
-      const newlyUpdatedNote = await collection.findOne({"_id": ObjectId(id)});
-      res.status(200).json(newlyUpdatedNote);
+      const updatedNote = await updateNotesService(id, title, content, datestring);
+      res.status(200).json(updatedNote);
     }catch(err){
       console.log(err)
       res.send(404).send("Not Found");
