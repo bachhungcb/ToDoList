@@ -6,7 +6,7 @@ const createUsersService = async (name, email, password) =>{
             name: name,
             email: email,
             password: password,
-            role: "admin"
+            role: "user"
         })
 
         return result;
