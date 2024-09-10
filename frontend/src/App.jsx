@@ -7,7 +7,7 @@ import axios from './util/axios.customize'
 function App() {
   useEffect(()=>{
     const fetchHelloWorld = async () =>{
-      const res = await axios.get(`/app/notes`)
+      const res = await axios.get(`/notes`)
       console.log(">>check res: ", res);
     }
     fetchHelloWorld();

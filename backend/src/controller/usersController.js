@@ -13,11 +13,8 @@ app.use(cors());
 
 const registerUsers = async (req,res) =>{
 
-    console.log(">>check req: ", typeof(req.body));
     const {Name, Email, Password} = req.body;
     const data = await createUsersService(Name, Email, Password);
-
-    console.log(data);
     return res.status(200).json(data);
 
 }

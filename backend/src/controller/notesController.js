@@ -1,11 +1,12 @@
 /* --------------INIT SETTINGS----------------- */
 const express = require("express");
-require('dotenv').config()
+
 const cors = require("cors");
 const { ObjectId } = require("mongodb");
 const { getDb } = require('../config/databaseConfig.js');
 const app = express();
 const Notes = require('../model/notes.model.js');
+const {createNotesService} = require('../services/notesService.js');
 
 app.use(express.json());
 app.use(cors());
@@ -20,16 +21,11 @@ const createNote = async (req,res) => {//post
     return res.status(400).json({ message: "Please provide Title and Content" });
   }
   try {
-    const db = getDb();
-    const collection = db.collection('ToDoList');
-    const response = await collection.insertOne({ Title: Title, 
-                                                  Content: Content,   
-                                                  Date: date
-                                                });
-    
+    const response = await createNotesService(Title, Content, datestring);
+
     // Fetch the newly added note using the insertedId
-    const newNote = await collection.findOne({ _id: response.insertedId });
-    res.status(200).json(newNote);
+    //const newNote = await collection.findOne({ _id: response.insertedId });
+    res.status(200).json(response);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -37,15 +33,6 @@ const createNote = async (req,res) => {//post
 
 const getNotes = async (req, res) =>{//get
     let result = [];
-    // try {
-    //   // Connect the client to the server	(optional starting in v4.7)
-    //   const db = getDb();
-
-    //   const collection = db.collection('ToDoList');
-    //   result = await collection.find( {}, {}).toArray();
-    // }catch(err){
-    //   console.log(err);
-    // }
     try{
       result = await Notes.find({});
     }catch(err){
