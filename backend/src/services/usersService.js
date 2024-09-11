@@ -1,6 +1,6 @@
 const Users = require("../model/users.model");
 
-const createUsersService = async (name, email, password) =>{
+const registerUsersService = async (name, email, password) =>{
     try{
         let result = await Users.create({
             name: name,
@@ -17,5 +17,5 @@ const createUsersService = async (name, email, password) =>{
 }
 
 module.exports ={
-    createUsersService,
+    registerUsersService,
 }

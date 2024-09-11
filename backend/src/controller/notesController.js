@@ -21,11 +21,13 @@ const createNote = async (req,res) => {//post
   }
   try {
     const response = await createNotesService(title, content, datestring);
-    // Fetch the newly added note using the insertedId
-    //const newNote = await collection.findOne({ _id: response.insertedId });
-    res.status(200).json(response);
+    if(response){
+      return res.status(200).json(response);
+    }else{
+      return res.status(400).send("Error");
+    }
   } catch (err) {
-    res.status(500).send(err);
+    return res.status(500).send("Internal Server Error");
   }
 }
 
@@ -33,10 +35,15 @@ const getNotes = async (req, res) =>{//get
     let result = [];
     try{
       result = await Notes.find({});
+      if(result){
+        return res.status(200).send(result);
+      }else{
+        return res.status(400).send("Error");
+      }
     }catch(err){
       console.log(err);
+      return res.status(500).send("Internal Server Error");
     }
-    res.status(200).send(result);
 }
 
 const deleteNotes = async (req, res) => {
@@ -67,7 +74,7 @@ const updateNote = async (req, res) => {
     res.status(200).json(updatedNote);
   } catch (err) {
     console.error("Error updating note:", err);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 };
 
@@ -88,10 +95,10 @@ const getNotesFromDay = async (req, res) => {
         $lt: endTime
       }
     }).toArray();
-    res.status(200).send(response);
+    return res.status(200).send(response);
   } catch (err) {
     console.error("Error fetching notes:", err);
-    res.status(500).send(err);
+    return res.status(500).send(err);
   }
 };
 
