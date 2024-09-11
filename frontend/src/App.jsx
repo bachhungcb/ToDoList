@@ -3,130 +3,128 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-
 const App = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
+  const [selectedNote, setSelectedNote] = useState(null);
 
+  // Fetch notes on initial load
   useEffect(() => {
-    const fetchNotes = async () =>{
-      try{
-        const response = await axios({
-          method: 'GET',
-          url: "http://localhost:5000/notes",
-        });
-        const notes = response.data;
-        setNotes(notes);
-      }catch(err){
-        console.log(err)
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/notes");
+        setNotes(response.data);
+      } catch (err) {
+        console.log(err);
       }
-    }
+    };
     fetchNotes();
   }, []);
 
+  // Add a new note
   const handleAddNote = async (event) => {
-    try{
-      const response = await axios({
-        method: "POST",
-        url:"http://localhost:5000/notes",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          title,
-          content
-        },
+    event.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/notes", {
+        title,
+        content,
       });
-      const newNote = await response;
-      setNotes([newNote, ...notes]);
+      const newNote = response.data;
+      setNotes([newNote, ...notes]);  // Add the new note to the start of the list
       setTitle("");
       setContent("");
-    }catch(err){  
+    } catch (err) {
       console.log(err);
     }
-   
   };
 
-  const [selectedNote, setSelectedNote] = useState(null);
-
+  // Handle note click (for editing)
   const handleNoteClick = (note) => {
     setSelectedNote(note);
     setTitle(note.title);
     setContent(note.content);
   };
 
-  const handleUpdateNote = (event) => {
+  // Update an existing note
+  const handleUpdateNote = async (event) => {
     event.preventDefault();
-  
-    if (!selectedNote) {
-      return;
+    if (!selectedNote) return;
+
+    try {
+      const response = await axios.put(`http://localhost:5000/notes/${selectedNote._id}`, {
+        title,
+        content,
+      });
+      const updatedNote = response.data;
+
+      setNotes(prevNotes => prevNotes.map(note => 
+        note._id === selectedNote._id ? updatedNote : note
+      ));
+      
+      setTitle("");
+      setContent("");
+      setSelectedNote(null);
+    } catch (err) {
+      console.log(err);
     }
-  
-    const updatedNote = {
-      id: selectedNote.id,
-      title: title,
-      content: content,
-    };
-  
-    const updatedNotesList = notes.map((note) => (note.id === selectedNote.id ? updatedNote : note));
-  
-    setNotes(updatedNotesList);
-    setTitle("");
-    setContent("");
-    setSelectedNote(null);
   };
 
+  // Cancel editing a note
   const handleCancel = () => {
     setTitle("");
     setContent("");
     setSelectedNote(null);
   };
 
-  const deleteNote = (event, noteId) => {
-    event.stopPropagation();
-  
-    const updatedNotes = notes.filter((note) => note.id !== noteId);
-  
-    setNotes(updatedNotes);
+  // Delete a note
+  const deleteNote = async (event, noteId) => {
+    event.stopPropagation();  // Prevent triggering note click
+    try {
+      await axios.delete(`http://localhost:5000/notes/${noteId}`);
+      const updatedNotes = notes.filter(note => note._id !== noteId);
+      setNotes(updatedNotes);  // Update the notes state
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <div className="app-container">
-      <form className="note-form"
-        onSubmit={(event) => (selectedNote ? handleUpdateNote(event) : handleAddNote(event))}>
+      <form className="note-form" onSubmit={(event) => (selectedNote ? handleUpdateNote(event) : handleAddNote(event))}>
         <input
           value={title}
           onChange={(event) => setTitle(event.target.value)}
           placeholder="Title"
-          required>
-        </input>
+          required
+        />
         <textarea
           value={content}
           onChange={(event) => setContent(event.target.value)}
           placeholder="Content"
           rows={10}
-          required>
-        </textarea>
+          required
+        />
 
         {selectedNote ? (
           <div className="edit-buttons">
             <button type="submit">Save</button>
-            <button onClick={handleCancel}>Cancel</button>
+            <button type="button" onClick={handleCancel}>Cancel</button>
           </div>
         ) : (
           <button type="submit">Add Note</button>
         )}
       </form>
+
       <div className="notes-grid">
         {notes.map((note) => (
-          <div key={note.id} className="note-item" onClick={() => handleNoteClick(note)}>
-          <div className="notes-header">
-            <button onClick={(event) => deleteNote(event, note.id)}>x</button>
+          <div key={note._id} className="note-item" onClick={() => handleNoteClick(note)}>
+            <div className="notes-header">
+              <button onClick={(event) => deleteNote(event, note._id)}>x</button>
+            </div>
+            <h2>{note.title}</h2>
+            <p>{note.content}</p>
           </div>
-          <h2>{note.title}</h2>
-          <p>{note.content}</p>
-        </div>
         ))}
       </div>
     </div>

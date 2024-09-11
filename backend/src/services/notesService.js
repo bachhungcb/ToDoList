@@ -26,20 +26,29 @@ const deleteNotesService = async (id) =>{
     }
 }
 
-const updateNotesService = async (id, title, content, date) =>{
-    inputedDate = date? date: Date.now();
-    try{   
-        const result = await Notes.findByIdAndUpdate(id, {
-            title: title, 
-            content: content,
-            date: inputedDate
-        })
-        return result;
-
-    }catch(err){
-        console.log(err);
+const updateNotesService = async (id, title, content, date) => {
+    const inputDate = date ? new Date(date) : new Date();
+    try {   
+      const result = await Notes.findByIdAndUpdate(
+        id, 
+        {
+          title: title, 
+          content: content,
+          date: inputDate
+        },
+        { new: true, runValidators: true }
+      );
+      
+      if (!result) {
+        throw new Error("Note not found");
+      }
+      
+      return result;
+    } catch (err) {
+      console.error("Error in updateNotesService:", err);
+      throw err;
     }
-}
+  };
 
 module.exports = {
     createNotesService,

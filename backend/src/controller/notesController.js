@@ -56,17 +56,20 @@ const deleteNotes = async (req, res) => {
 };
 
 
-const updateNote = async (req,res)=>{//put
-    const id = req.params.id;
-    const {title, content, date: datestring} = req.body;
-    try{
-      const updatedNote = await updateNotesService(id, title, content, datestring);
-      res.status(200).json(updatedNote);
-    }catch(err){
-      console.log(err)
-      res.send(404).send("Not Found");
+const updateNote = async (req, res) => {
+  const id = req.params.id;
+  const { title, content, date: dateString } = req.body;
+  try {
+    const updatedNote = await updateNotesService(id, title, content, dateString);
+    if (!updatedNote) {
+      return res.status(404).send("Note not found");
     }
-}
+    res.status(200).json(updatedNote);
+  } catch (err) {
+    console.error("Error updating note:", err);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 const getNotesFromDay = async (req, res) => {
   const { date: datestring } = req.query;
