@@ -12,8 +12,11 @@ const App = () => {
   useEffect(() => {
     const fetchNotes = async () =>{
       try{
-        const response = await axios.get("http://localhost:5000/notes");
-        const notes =response.data;
+        const response = await axios({
+          method: 'GET',
+          url: "http://localhost:5000/notes",
+        });
+        const notes = response.data;
         setNotes(notes);
       }catch(err){
         console.log(err)
@@ -24,26 +27,25 @@ const App = () => {
 
   const handleAddNote = async (event) => {
     try{
-      const newNote = await
+      const response = await axios({
+        method: "POST",
+        url:"http://localhost:5000/notes",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          title,
+          content
+        },
+      });
+      const newNote = await response;
       setNotes([newNote, ...notes]);
       setTitle("");
       setContent("");
-      const response = await fetch(
-        "http://localhost:5000/notes",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title,
-            content,
-          }),
-        }
-      );
     }catch(err){  
       console.log(err);
     }
+   
   };
 
   const [selectedNote, setSelectedNote] = useState(null);
