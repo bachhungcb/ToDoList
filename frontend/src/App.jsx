@@ -1,7 +1,15 @@
 import React from "react";
 import "./App.css";
 import { useState, useEffect } from "react";
-import axios from 'axios';
+import axios from './util/axios.customize';
+
+/*
+  const notes ={
+    _id: ObjectId,
+    title: String,
+    content: String
+  }
+*/
 
 const App = () => {
   const [title, setTitle] = useState("");
@@ -13,8 +21,8 @@ const App = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/notes");
-        setNotes(response.data);
+        const response = await axios.get(`/notes`);
+        setNotes(response);
       } catch (err) {
         console.log(err);
       }
@@ -26,11 +34,11 @@ const App = () => {
   const handleAddNote = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/notes", {
+      const response = await axios.post("/notes", {
         title,
         content,
       });
-      const newNote = response.data;
+      const newNote = response;
       setNotes([newNote, ...notes]);  // Add the new note to the start of the list
       setTitle("");
       setContent("");
@@ -52,11 +60,11 @@ const App = () => {
     if (!selectedNote) return;
 
     try {
-      const response = await axios.put(`http://localhost:5000/notes/${selectedNote._id}`, {
+      const response = await axios.put(`/notes/${selectedNote._id}`, {
         title,
         content,
       });
-      const updatedNote = response.data;
+      const updatedNote = response;
 
       setNotes(prevNotes => prevNotes.map(note => 
         note._id === selectedNote._id ? updatedNote : note
@@ -81,7 +89,7 @@ const App = () => {
   const deleteNote = async (event, noteId) => {
     event.stopPropagation();  // Prevent triggering note click
     try {
-      await axios.delete(`http://localhost:5000/notes/${noteId}`);
+      await axios.delete(`/notes/${noteId}`);
       const updatedNotes = notes.filter(note => note._id !== noteId);
       setNotes(updatedNotes);  // Update the notes state
     } catch (err) {
