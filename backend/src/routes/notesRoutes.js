@@ -10,6 +10,6 @@ notes_router.get("/", addNotes.getNotes);
 notes_router.delete("/:id", addNotes.deleteNotes);
 notes_router.put("/:id", addNotes.updateNote);
 
-notes_router.get("/today", )
+//notes_router.get("/today", )
 
 module.exports = notes_router;

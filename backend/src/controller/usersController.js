@@ -22,7 +22,7 @@ const registerUsers = async (req,res) =>{
         return res.status(200).json(data);
     }catch(err){
         console.log(err);
-        res.status(500).send("Internal Server Error");
+        return res.status(500).send("Internal Server Error");
     }
 
 }
