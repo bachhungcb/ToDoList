@@ -13,9 +13,9 @@ app.use(cors());
 
 const registerUsers = async (req,res) =>{
 
-    const {Name, Email, Password} = req.body;
+    const {name, email, password} = req.body;
     try{
-        const data = await registerUsersService(Name, Email, Password);
+        const data = await registerUsersService(name, email, password);
         if (!data){
             return res.status(400).send("Error");
         }
