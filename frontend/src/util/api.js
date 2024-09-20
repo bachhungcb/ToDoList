@@ -26,7 +26,19 @@ const loginUserApi = async (email, password) =>{
     }
 }
 
+const getUserApi = () =>{
+    try{
+        const URL_API = "/users/user"; 
+        const result = axios.get(URL_API);
+        return result;
+    }catch(err){
+        console.log(err);
+        return null;
+    }
+}
+
 export {
     createUserApi,
-    loginUserApi
+    loginUserApi,
+    getUserApi
 };

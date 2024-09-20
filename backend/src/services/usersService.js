@@ -74,7 +74,7 @@ const loginUsersService = async (email, password) =>{
 
 const getUsersService = async () =>{
     try{
-        const result = await Users.find({});
+        const result = await Users.find({}).select("-password");
         return result;
     }catch(err){
         console.log(err);
