@@ -30,7 +30,7 @@ const Header = () => {
             key: 'login',
           },
           {
-            label: <Link to={"register"}>Đăng xuất</Link>,
+            label: <Link to={"register"}>Đăng ký</Link>,
             key: 'logout',
           },
         ],

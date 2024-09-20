@@ -16,18 +16,19 @@ const registerPage = () => {
             notification.error({
                 message: "User Existed",
             });
-        }
-        if(response){
-            notification.success({
-                message: "CREATE USER",
-                description: "Success",
-            });
-            navigate("/login");
         }else{
-            notification.error({
-                message: "CREATE USER",
-                description: "Error",
-            });
+            if(response){
+                notification.success({
+                    message: "CREATE USER",
+                    description: "Success",
+                });
+                navigate("/login");
+            }else{
+                notification.error({
+                    message: "CREATE USER",
+                    description: "Error",
+                });
+            }
         }
     };
 

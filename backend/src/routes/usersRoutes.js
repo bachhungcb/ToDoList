@@ -7,5 +7,7 @@ const users_routes = express.Router();
 
 users_routes.post("/register", users.registerUsers);
 users_routes.post("/login", users.loginUsers);
+users_routes.get("/user", users.getUsers);
+
 
 module.exports = users_routes;
