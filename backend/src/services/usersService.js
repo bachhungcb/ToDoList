@@ -1,6 +1,8 @@
 const Users = require("../model/users.model");
 const bcrypt = require('bcrypt');
+const jwt = require ('jsonwebtoken');
 const saltRounds = 10;
+require('dotenv').config();
 
 const registerUsersService = async (name, email, password) =>{
     try{
@@ -38,8 +40,23 @@ const loginUsersService = async (email, password) =>{
                     EM: "Email/Password không hợp lệ"
                 }
             }else{
+                const payload = {
+                    email: user.email,
+                    name: user.name
+                }
                 //create an access token 
-                return "create an access token";
+                const access_token = jwt.sign(
+                    payload,
+                    process.env.JWT_SECRET,
+                    {
+                        expiresIn: process.env.JWT_EXPIRE
+                    }
+                );
+                return{ access_token,
+                user:{
+                    email: user.email,
+                    name: user.name
+                }};
             }
         }else{
             return {
