@@ -2,7 +2,7 @@
 const express = require("express");
 require('dotenv').config()
 const cors = require("cors");
-const { registerUsersService } = require("../services/usersService.js");
+const { registerUsersService, loginUsersService } = require("../services/usersService.js");
 
 const app = express();
 app.use(express.json());
@@ -31,6 +31,13 @@ const registerUsers = async (req,res) =>{
 
 }
 
+const loginUsers = async (req, res) =>{
+    const {email, password} = req.body;
+    const data = await loginUsersService(email,password);
+    return res.status(200).json(data);
+}
+
 module.exports = {
-    registerUsers
+    registerUsers,
+    loginUsers
 };
