@@ -99,7 +99,7 @@ const notesPage = () => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container" style={{margin: 50}}>
       <form className="note-form" onSubmit={(event) => (selectedNote ? handleUpdateNote(event) : handleAddNote(event))}>
         <input
           value={title}

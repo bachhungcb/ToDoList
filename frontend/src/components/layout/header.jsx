@@ -26,16 +26,15 @@ const Header = () => {
       icon: <SettingOutlined />,
       children: [
           {
-            label: 'Đăng nhập',
+            label: <Link to={"login"}>Đăng nhập</Link>,
             key: 'login',
           },
           {
-            label: 'Đăng xuất',
+            label: <Link to={"register"}>Đăng xuất</Link>,
             key: 'logout',
           },
         ],
     }
-  
   ];
   const [current, setCurrent] = useState('mail');
   const onClick = (e) => {

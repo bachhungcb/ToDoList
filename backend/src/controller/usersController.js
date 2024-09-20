@@ -19,6 +19,10 @@ const registerUsers = async (req,res) =>{
         if (!data){
             return res.status(400).send("Error");
         }
+        
+        if(data.exists){
+            return res.status(409).send("Conflict");
+        }
         return res.status(200).json(data);
     }catch(err){
         console.log(err);
