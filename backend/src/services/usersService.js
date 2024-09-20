@@ -28,7 +28,7 @@ const registerUsersService = async (name, email, password) =>{
 const loginUsersService = async (email, password) =>{
     try{
         //fetch user by email
-        const user = await Users.findOne({email: email});
+        const user = await Users.findOne({email: email});  
         if(user){
             //compare password
             const isMatchedPassword = await bcrypt.compare(
@@ -52,7 +52,9 @@ const loginUsersService = async (email, password) =>{
                         expiresIn: process.env.JWT_EXPIRE
                     }
                 );
-                return{ access_token,
+                return{ 
+                EC: 0,
+                access_token,
                 user:{
                     email: user.email,
                     name: user.name
