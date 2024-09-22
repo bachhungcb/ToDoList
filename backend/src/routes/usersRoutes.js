@@ -2,10 +2,11 @@
 const express = require("express");
 const users = require('../controller/usersController');
 const delay = require("../middleware/delay");
+const auth = require("../middleware/auth");
 const users_routes = express.Router();
 
 /*--------------CODE HERE------------ */
-users_routes.use(delay); // applies delay middleware to all routes under users_routes
+users_routes.use(auth); // applies delay middleware to all routes under users_routes
 
 
 users_routes.post("/register", users.registerUsers);
