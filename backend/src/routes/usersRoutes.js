@@ -5,7 +5,8 @@ const delay = require("../middleware/delay");
 const users_routes = express.Router();
 
 /*--------------CODE HERE------------ */
-users_routes.all('*', delay);
+users_routes.use(delay); // applies delay middleware to all routes under users_routes
+
 
 users_routes.post("/register", users.registerUsers);
 users_routes.post("/login", users.loginUsers);
