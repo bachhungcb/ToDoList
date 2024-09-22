@@ -1,5 +1,7 @@
-const delay = () =>{
-    
+const delay = (req, res, next) =>{
+    setTimeout(()=>{
+        next();
+    }, 3000)
 }
 
-export default delay
+module.exports = delay
