@@ -12,6 +12,6 @@ users_routes.use(auth); // applies delay middleware to all routes under users_ro
 users_routes.post("/register", users.registerUsers);
 users_routes.post("/login", users.loginUsers);
 users_routes.get("/user", users.getUsers);
-
+users_routes.get("/account", delay, users.getAccount);
 
 module.exports = users_routes;
