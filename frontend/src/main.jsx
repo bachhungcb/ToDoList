@@ -14,6 +14,7 @@ import NotesPage from './pages/notes.jsx';
 import UsersPage from './pages/users.jsx';
 import HomePage from './pages/home.jsx';
 import LoginPage from './pages/login.jsx';
+import { AuthWrapper } from './components/context/auth.context.jsx';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <AuthWrapper>
     <RouterProvider router={router} />
+    </AuthWrapper>
   </StrictMode>,
 )

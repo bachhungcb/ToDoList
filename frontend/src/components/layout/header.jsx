@@ -1,31 +1,55 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined,FormOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
-import React, { useState } from 'react';
+import { AppstoreOutlined, MailOutlined, SettingOutlined, FormOutlined } from '@ant-design/icons';
+import { Menu, Button, Form, Input, notification } from 'antd';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/auth.context';
 
 const Header = () => {
   const navigate = useNavigate();
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log(">>check auth: ", auth);
+
   const items = [
     {
-      label:<Link to={"/"}>Home Page</Link>,
+      label: <Link to={"/"}>Home Page</Link>,
       key: 'home',
       icon: <MailOutlined />,
     },
-    {
-      label:<Link to={"/user"}>Users</Link> ,
+    ...(auth.isAuthenticated ? [{
+      label: <Link to={"/user"}>Users</Link>,
       key: 'user',
       icon: <AppstoreOutlined />,
-    },
-    ,{
-      label:<Link to={"/note"}>Notes</Link> ,
+    }
+    , {
+      label: <Link to={"/note"}>Notes</Link>,
       key: 'note',
       icon: <FormOutlined />,
-    },
+    },] : []),
+    
     {
-      label: 'Welcome',
+      label: `Welcome ${auth?.user?.email}`,
       key: 'SubMenu',
       icon: <SettingOutlined />,
       children: [
+        ...(auth.isAuthenticated ? [{
+          label: <span onClick={() => {
+            localStorage.clear("access_token");
+            setAuth({
+              isAuthenticated: false,
+              user:{
+                email:  "",
+                name:  ""
+              }
+            })
+            notification.success({
+              message: "LOGOUT",
+              description: "Success",
+            });
+            setCurrent("home");
+            navigate("/");
+          }}>Đăng xuất</span>,
+          key: 'logout',
+        }] : [
           {
             label: <Link to={"login"}>Đăng nhập</Link>,
             key: 'login',
@@ -34,15 +58,8 @@ const Header = () => {
             label: <Link to={"register"}>Đăng ký</Link>,
             key: 'register',
           },
-          {
-            label: <span onClick={()=>{
-              localStorage.clear("access_token");
-              navigate("/");
-              setCurrent("home");
-            }}>Đăng xuất</span>,
-            key: 'logout',
-          },
-        ],
+        ]),
+      ],
     }
   ];
   const [current, setCurrent] = useState('mail');
