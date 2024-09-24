@@ -1,4 +1,4 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined, FormOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, HomeOutlined, SettingOutlined, UsergroupAddOutlined, FormOutlined } from '@ant-design/icons';
 import { Menu, Button, Form, Input, notification } from 'antd';
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,12 +13,12 @@ const Header = () => {
     {
       label: <Link to={"/"}>Home Page</Link>,
       key: 'home',
-      icon: <MailOutlined />,
+      icon: <HomeOutlined />,
     },
     ...(auth.isAuthenticated ? [{
       label: <Link to={"/user"}>Users</Link>,
       key: 'user',
-      icon: <AppstoreOutlined />,
+      icon: <UsergroupAddOutlined />,
     }
     , {
       label: <Link to={"/note"}>Notes</Link>,
@@ -27,7 +27,7 @@ const Header = () => {
     },] : []),
     
     {
-      label: `Welcome ${auth?.user?.email}`,
+      label: `Welcome ${auth?.user?.email ?? ""}`,
       key: 'SubMenu',
       icon: <SettingOutlined />,
       children: [
