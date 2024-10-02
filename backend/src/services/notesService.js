@@ -1,12 +1,13 @@
 const { ObjectId } = require('mongodb');
 const Notes = require('../model/notes.model');
 
-const createNotesService = async(title, content, date) => {
+const createNotesService = async(title, content, date, userId) => {
     try{
         let result = await Notes.create({
             title: title,
             content: content,
-            date: date
+            date: date,
+            userId: userId
         })
 
         return result;

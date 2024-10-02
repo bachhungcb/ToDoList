@@ -6,7 +6,8 @@ let notesSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now(),
-    }
+    },
+    userId: String,
 })
 
 const Notes = mongoose.model('notes', notesSchema);

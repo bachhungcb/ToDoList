@@ -15,12 +15,12 @@ app.use(cors());
 /* --------------CREATE NOTE----------------- */
 
 const createNote = async (req,res) => {//post
-  const { title, content, Date: datestring } = req.body;
+  const { title, content, Date: datestring, userId } = req.body;
   if (!title || !content) {
     return res.status(400).json({ message: "Please provide title and content" });
   }
   try {
-    const response = await createNotesService(title, content, datestring);
+    const response = await createNotesService(title, content, datestring, userId);
     if(response){
       return res.status(200).json(response);
     }else{
@@ -33,8 +33,9 @@ const createNote = async (req,res) => {//post
 
 const getNotes = async (req, res) =>{//get
     let result = [];
+    const userId = req.body.userId; //this will return userId
     try{
-      result = await Notes.find({});
+      result = await Notes.find({userId: userId}); 
       if(result){
         return res.status(200).send(result);
       }else{
