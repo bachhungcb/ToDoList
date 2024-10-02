@@ -33,8 +33,8 @@ const createNote = async (req,res) => {//post
 
 const getNotes = async (req, res) =>{//get
     let result = [];
-    const userId = req.body.userId; //this will return userId
     try{
+      const userId =  req.params.id; //this will return userId
       result = await Notes.find({userId: userId}); 
       if(result){
         return res.status(200).send(result);

@@ -7,7 +7,6 @@ import { AuthContext } from '../context/auth.context';
 const Header = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
-  console.log(">>check auth: ", auth);
 
   const items = [
     {
@@ -38,7 +37,8 @@ const Header = () => {
               isAuthenticated: false,
               user:{
                 email:  "",
-                name:  ""
+                name:  "",
+                _id: "" // delete userId when logout
               }
             })
             notification.success({

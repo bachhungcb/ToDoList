@@ -23,7 +23,8 @@ const LoginPage = () => {
                 isAuthenticated: true,
                 user:{
                     email: response?.user?.email ?? "",
-                    name:  response?.user?.name ?? ""
+                    name:  response?.user?.name ?? "",
+                    _id: response.user._id, // add _id to user Infor
                 }
             })
             navigate("/");

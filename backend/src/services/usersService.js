@@ -28,7 +28,8 @@ const registerUsersService = async (name, email, password) =>{
 const loginUsersService = async (email, password) =>{
     try{
         //fetch user by email
-        const user = await Users.findOne({email: email});  
+        const user = await Users.findOne({email: email});
+        
         if(user){
             //compare password
             const isMatchedPassword = await bcrypt.compare(
@@ -42,7 +43,8 @@ const loginUsersService = async (email, password) =>{
             }else{
                 const payload = {
                     email: user.email,
-                    name: user.name
+                    name: user.name,
+                    _id: user._id.toString(), //convert userId from ObjectId to String
                 }
                 //create an access token 
                 const access_token = jwt.sign(
@@ -57,7 +59,8 @@ const loginUsersService = async (email, password) =>{
                 access_token,
                 user:{
                     email: user.email,
-                    name: user.name
+                    name: user.name,
+                    _id: user._id.toString(),
                 }};
             }
         }else{

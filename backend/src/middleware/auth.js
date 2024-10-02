@@ -9,7 +9,6 @@ const auth = (req,res,next)=>{
     }else{
         if(req.headers&&req.headers.authorization){
             const token = req.headers.authorization.split(' ')[1];
-
             //verify
             try{
                 const decoded = jwt.verify(
@@ -18,6 +17,7 @@ const auth = (req,res,next)=>{
                 req.user ={
                     email: decoded.email,
                     name: decoded.name,
+                    _id: decoded._id, //get userId from token
                     createdBy: "bachdam"
                 }
                 next();

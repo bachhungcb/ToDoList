@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../styles/notes.css";
 import { useState, useEffect } from "react";
 import axios from '../util/axios.customize';
+import { AuthContext } from "../components/context/auth.context";
 
 
 /*
   const notes ={
     _id: ObjectId,
     title: String,
-    content: String
+    content: String,
+    userId: String,
   }
 */
 
 const notesPage = () => {
+  const {auth} = useContext(AuthContext);//get userInformation
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
@@ -22,7 +25,9 @@ const notesPage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await axios.get(`/notes`);
+        const response = await axios.get(
+                        `/notes/${auth.user._id}`
+                      );
         setNotes(response);
       } catch (err) {
         console.log(err);
@@ -35,9 +40,11 @@ const notesPage = () => {
   const handleAddNote = async (event) => {
     event.preventDefault();
     try {
+      const id = auth.user._id;
       const response = await axios.post("/notes", {
         title,
         content,
+        id
       });
       const newNote = response;
       setNotes([newNote, ...notes]);  // Add the new note to the start of the list

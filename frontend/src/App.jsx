@@ -19,7 +19,8 @@ const App = () =>{
           isAuthenticated: true,
           user:{
               email: res.email,
-              name:  res.name
+              name:  res.name,
+              _id: res._id //add userId infor
           }
         })
       }
