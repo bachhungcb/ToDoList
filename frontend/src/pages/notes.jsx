@@ -3,7 +3,11 @@ import "../styles/notes.css";
 import { useState, useEffect } from "react";
 import axios from '../util/axios.customize';
 import { AuthContext } from "../components/context/auth.context";
+import { DatePicker, Space } from 'antd';
 
+const onChange = (date, dateString) => {
+  console.log(date, dateString);
+};
 
 /*
   const notes ={
@@ -138,8 +142,16 @@ const notesPage = () => {
             <div className="notes-header">
               <button onClick={(event) => deleteNote(event, note._id)}>x</button>
             </div>
-            <h2>{note.title}</h2>
-            <p>{note.content}</p>
+
+            <div className="notes-body">
+              <h2>{note.title}</h2>
+              <p className="notes-content">{note.content}</p>
+            </div>
+            <div>
+              <p>
+                HEHEHEHE
+              </p>
+            </div>
           </div>
         ))}
       </div>

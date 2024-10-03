@@ -15,12 +15,12 @@ app.use(cors());
 /* --------------CREATE NOTE----------------- */
 
 const createNote = async (req,res) => {//post
-  const { title, content, Date: datestring, userId } = req.body;
+  const { title, content, Date: datestring, id } = req.body;
   if (!title || !content) {
     return res.status(400).json({ message: "Please provide title and content" });
   }
   try {
-    const response = await createNotesService(title, content, datestring, userId);
+    const response = await createNotesService(title, content, datestring, id);
     if(response){
       return res.status(200).json(response);
     }else{
