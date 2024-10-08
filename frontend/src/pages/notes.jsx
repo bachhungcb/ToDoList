@@ -14,6 +14,10 @@ const onChange = (date, dateString) => {
     _id: ObjectId,
     title: String,
     content: String,
+    date: {
+        type: Date,
+        default: Date.now(),
+    },
     userId: String,
   }
 */
@@ -22,6 +26,7 @@ const notesPage = () => {
   const {auth} = useContext(AuthContext);//get userInformation
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [date, setDate] = useState("");
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
 
@@ -45,6 +50,7 @@ const notesPage = () => {
     event.preventDefault();
     try {
       const id = auth.user._id;
+      console.log(">>check date: ", date);
       const response = await axios.post("/notes", {
         title,
         content,
@@ -125,7 +131,10 @@ const notesPage = () => {
           rows={10}
           required
         />
-
+        <DatePicker 
+          value={date}
+          onChange={(event) => setContent(event.target.value)}
+        />
         {selectedNote ? (
           <div className="edit-buttons">
             <button type="submit">Save</button>
@@ -147,11 +156,11 @@ const notesPage = () => {
               <h2>{note.title}</h2>
               <p className="notes-content">{note.content}</p>
             </div>
-            <div>
-              <p>
-                HEHEHEHE
-              </p>
+
+            <div className="notes-footer">
+              <p className="notes-date">{new Date(note.date).toLocaleDateString()}</p>
             </div>
+
           </div>
         ))}
       </div>

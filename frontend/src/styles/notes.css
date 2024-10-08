@@ -121,3 +121,10 @@ body {
     overflow-x: hidden; /* Hide horizontal scrollbar */
     margin-bottom: 15px; /* Space at the bottom */
   }
+  .notes-footer{
+    display: flex;
+    justify-content: center;
+  }
+  .notes-date{
+    border: 2px solid black;
+  }
