@@ -5,9 +5,7 @@ import axios from '../util/axios.customize';
 import { AuthContext } from "../components/context/auth.context";
 import { DatePicker, Space } from 'antd';
 
-const onChange = (date, dateString) => {
-  console.log(date, dateString);
-};
+
 
 /*
   const notes ={
@@ -45,16 +43,18 @@ const notesPage = () => {
     fetchNotes();
   }, []);
 
+
+
   // Add a new note
   const handleAddNote = async (event) => {
     event.preventDefault();
     try {
       const id = auth.user._id;
-      console.log(">>check date: ", date);
       const response = await axios.post("/notes", {
         title,
         content,
-        id
+        id,
+        date //add date with notes
       });
       const newNote = response;
       setNotes([newNote, ...notes]);  // Add the new note to the start of the list
@@ -115,6 +115,11 @@ const notesPage = () => {
     }
   };
 
+  //handle datepicker
+  const onChange = (date, dateString) => {
+    setDate(date);
+  };
+
   return (
     <div className="app-container" style={{margin: 50}}>
       <form className="note-form" onSubmit={(event) => (selectedNote ? handleUpdateNote(event) : handleAddNote(event))}>
@@ -133,7 +138,7 @@ const notesPage = () => {
         />
         <DatePicker 
           value={date}
-          onChange={(event) => setContent(event.target.value)}
+          onChange={onChange} //(event) => setDate(event.target.value)
         />
         {selectedNote ? (
           <div className="edit-buttons">
