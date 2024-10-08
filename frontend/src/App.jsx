@@ -6,6 +6,15 @@ import axios from '../src/util/axios.customize';
 import { AuthContext } from "./components/context/auth.context";
 import { Spin } from "antd";
 
+// function getPayload(jwt){
+//   // A JWT has 3 parts separated by '.'
+//   // The middle part is a base64 encoded JSON
+//   // decode the base64 
+//   return atob(jwt.split(".")[1])
+// }
+
+// const payload = getPayload();
+
 const App = () =>{
   const {setAuth, appLoading, setAppLoading} = useContext(AuthContext);
 
