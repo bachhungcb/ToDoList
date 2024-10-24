@@ -63,7 +63,7 @@ const Header = () => {
     }
   ];
   const [current, setCurrent] = useState('mail');
-  const onClick = (e) => {
+  const onClick = (e) => { //for debug only
     console.log('click ', e);
     setCurrent(e.key);
   };

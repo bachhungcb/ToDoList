@@ -21,7 +21,7 @@ const App = () =>{
   useEffect(()  =>{
     const fetchAccount = async() =>{
       setAppLoading(true);
-      const res = await axios.get(`/users/account`);
+      const res = await axios.get(`/users/account`); //get user information
 
       if(res && !res.message){
         setAuth({
