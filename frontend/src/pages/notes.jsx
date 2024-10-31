@@ -81,6 +81,7 @@ const notesPage = () => {
       const response = await axios.put(`/notes/${selectedNote._id}`, {
         title,
         content,
+        date
       });
       const updatedNote = response;
 
@@ -91,6 +92,7 @@ const notesPage = () => {
       setTitle("");
       setContent("");
       setSelectedNote(null);
+      setDate(null);
     } catch (err) {
       console.log(err);
     }
@@ -100,7 +102,7 @@ const notesPage = () => {
   const handleCancel = () => {
     setTitle("");
     setContent("");
-    setSelectedNote(null);
+    setSelectedNote("");
   };
 
   // Delete a note
