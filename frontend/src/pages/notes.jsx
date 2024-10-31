@@ -3,7 +3,7 @@ import "../styles/notes.css";
 import { useState, useEffect } from "react";
 import axios from '../util/axios.customize';
 import { AuthContext } from "../components/context/auth.context";
-import { DatePicker, Space } from 'antd';
+import { DatePicker, notification, Space } from 'antd';
 
 
 
@@ -60,6 +60,10 @@ const notesPage = () => {
       setNotes([newNote, ...notes]);  // Add the new note to the start of the list
       setTitle("");
       setContent("");
+      notification.success({
+        message: "CREATE NOTE",
+        description: "Success",
+      })
     } catch (err) {
       console.log(err);
     }
@@ -93,6 +97,11 @@ const notesPage = () => {
       setContent("");
       setSelectedNote(null);
       setDate(null);
+
+      notification.success({
+        message: "UPDATE NOTE",
+        description: "Success",
+      })
     } catch (err) {
       console.log(err);
     }
@@ -112,6 +121,10 @@ const notesPage = () => {
       await axios.delete(`/notes/${noteId}`);
       const updatedNotes = notes.filter(note => note._id !== noteId);
       setNotes(updatedNotes);  // Update the notes state
+      notification.error({
+        message: "DELETE NOTE",
+        description: "Success",
+      })
     } catch (err) {
       console.log(err);
     }
