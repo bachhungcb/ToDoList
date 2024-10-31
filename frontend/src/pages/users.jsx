@@ -8,7 +8,7 @@ const UsersPage = () =>{
     useEffect(()=>{
         const fetchUser = async () =>{
             const res = await getUserApi();
-            if(!res?.message){
+            if(res?.EC != 3){ //!res?.message
                 setDataSource(res);
             }else{
                 notification.error({

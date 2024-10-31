@@ -40,7 +40,11 @@ const loginUsers = async (req, res) =>{
 const getUsers = async (req,res) =>{
     const user = req.user;
     const data = await getUsersService(user.role);
-    return res.status(200).json(data);
+    if(data.EC != 3){
+        return res.status(200).json(data);
+    }else{
+        return res.status(400).json(data);
+    }
 }
 
 const getAccount = async (req,res) =>{

@@ -26,10 +26,10 @@ const loginUserApi = async (email, password) =>{
     }
 }
 
-const getUserApi = () =>{
+const getUserApi = async () =>{
     try{
         const URL_API = "/users/user"; 
-        const result = axios.get(URL_API);
+        const result = await axios.get(URL_API);
         return result;
     }catch(err){
         console.log(err);
