@@ -29,7 +29,6 @@ const loginUsersService = async (email, password) =>{
     try{
         //fetch user by email
         const user = await Users.findOne({email: email});
-        
         if(user){
             //compare password
             const isMatchedPassword = await bcrypt.compare(
@@ -41,10 +40,11 @@ const loginUsersService = async (email, password) =>{
                     EM: "Email/Password không hợp lệ"
                 }
             }else{
-                const payload = {
+                const payload = { //payload for access token
                     email: user.email,
                     name: user.name,
                     _id: user._id.toString(), //convert userId from ObjectId to String
+                    role: user.role
                 }
                 //create an access token 
                 const access_token = jwt.sign(
@@ -57,10 +57,11 @@ const loginUsersService = async (email, password) =>{
                 return{ 
                 EC: 0,
                 access_token,
-                user:{
+                user:{ //return req.user
                     email: user.email,
                     name: user.name,
                     _id: user._id.toString(),
+                    role: user.role
                 }};
             }
         }else{
@@ -75,10 +76,17 @@ const loginUsersService = async (email, password) =>{
     }
 }
 
-const getUsersService = async () =>{
+const getUsersService = async (role) =>{
     try{
-        const result = await Users.find({}).select("-password");
-        return result;
+        if(role == 'admin'){
+            const result = await Users.find({}).select("-password");
+            return result;
+        }else{
+            return{
+                EC: 3,
+                EM: "User can not access this function"
+            }
+        }
     }catch(err){
         console.log(err);
         return null;

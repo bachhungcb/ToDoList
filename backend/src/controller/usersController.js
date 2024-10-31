@@ -38,12 +38,14 @@ const loginUsers = async (req, res) =>{
 }
 
 const getUsers = async (req,res) =>{
-    const data = await getUsersService();
+    const user = req.user;
+    const data = await getUsersService(user.role);
     return res.status(200).json(data);
 }
 
 const getAccount = async (req,res) =>{
-    return res.status(200).json(req.user);
+    const result = req.user;
+    return res.status(200).json(result);
 }
 
 module.exports = {

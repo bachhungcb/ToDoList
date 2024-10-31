@@ -18,6 +18,7 @@ const auth = (req,res,next)=>{
                     email: decoded.email,
                     name: decoded.name,
                     _id: decoded._id, //get userId from token
+                    role: decoded.role,
                     createdBy: "bachdam"
                 }
                 next();

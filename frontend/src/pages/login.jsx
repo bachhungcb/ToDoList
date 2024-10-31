@@ -13,6 +13,7 @@ const LoginPage = () => {
         const {email, password} = values;
     
         const response = await loginUserApi(email, password);
+        console.log(">>check res: ", response);
         if(response && response.EC == 0){
             localStorage.setItem("access_token", response.access_token)
             notification.success({
@@ -24,7 +25,8 @@ const LoginPage = () => {
                 user:{
                     email: response?.user?.email ?? "",
                     name:  response?.user?.name ?? "",
-                    _id: response.user._id, // add _id to user Infor
+                    _id: response.user._id, // add _id to user Infor,
+                    role: response?.user?.role ?? ""
                 }
             })
             navigate("/");
