@@ -14,11 +14,13 @@ const Header = () => {
       key: 'home',
       icon: <HomeOutlined />,
     },
-    ...(auth.isAuthenticated ? [{
-      label: <Link to={"/user"}>Users</Link>,
-      key: 'user',
-      icon: <UsergroupAddOutlined />,
-    }
+    ...(auth.isAuthenticated ? [
+      ...(auth.user.role == "admin" ? [
+        {
+        label: <Link to={"/user"}>Users</Link>,
+        key: 'user',
+        icon: <UsergroupAddOutlined />,
+      },] : [])
     , {
       label: <Link to={"/note"}>Notes</Link>,
       key: 'note',
@@ -38,7 +40,8 @@ const Header = () => {
               user:{
                 email:  "",
                 name:  "",
-                _id: "" // delete userId when logout
+                _id: "", // delete userId when logout,
+                role: ""
               }
             })
             notification.success({
