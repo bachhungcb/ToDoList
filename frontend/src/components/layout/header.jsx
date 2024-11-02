@@ -63,6 +63,9 @@ const Header = () => {
           },
         ]),
       ],
+    },{
+      label: <Link to={"profile"}>Profile</Link>,
+      key: 'profile',
     }
   ];
   const [current, setCurrent] = useState('mail');

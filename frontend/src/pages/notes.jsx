@@ -77,7 +77,7 @@ const notesPage = () => {
   };
 
   // Update an existing note
-  const handleUpdateNote = async (event) => {
+  const handleUpdateNote = async (event) => {  
     event.preventDefault();
     if (!selectedNote) return;
 

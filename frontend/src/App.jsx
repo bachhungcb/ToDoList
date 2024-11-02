@@ -29,7 +29,8 @@ const App = () =>{
           user:{
               email: res.email,
               name:  res.name,
-              _id: res._id //add userId infor
+              _id: res._id, //add userId infor
+              role: res.role
           }
         })
       }
