@@ -7,11 +7,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Pencil } from "lucide-react"; // Import icon for edit button
 import axios from '../util/axios.customize';
 import { getUserApi } from "@/util/api";
+import { notification } from "antd";
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function ProfilePage() {
   const { auth, setAuth, appLoading, setAppLoading } = useContext(AuthContext);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
+  const [current, setCurrent] = useState('mail');
   useEffect(() => {
     let isMounted = true;
 
@@ -21,8 +24,10 @@ export default function ProfilePage() {
       try {
         setAppLoading(true);
         const res = await axios.get('/users/account');
-        
-        if (isMounted && res) {
+        console.log(">>check res: ", !res.message);
+        if (!res.message) {//isMounted && res
+          console.log("heheheh")
+          setAppLoading(false);
           setAuth({
             isAuthenticated: true,
             user: {
@@ -32,12 +37,19 @@ export default function ProfilePage() {
               role: res.data.role
             }
           });
+        }else{
+          setAppLoading(false);
+          console.error('Profile fetch error:', err);
+          setError('Failed to load profile. Please try again.');
+          setAuth({ isAuthenticated: false, user: null });
+          return;
         }
       } catch (err) {
         if (isMounted) {
           console.error('Profile fetch error:', err);
           setError('Failed to load profile. Please try again.');
           setAuth({ isAuthenticated: false, user: null });
+          return;
         }
       } finally {
         if (isMounted) {
@@ -125,10 +137,6 @@ export default function ProfilePage() {
           <p className="text-sm font-medium text-muted-foreground">Role</p>
           <p className="font-medium capitalize">{auth.user.role}</p>
         </div>
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-muted-foreground">User ID</p>
-          <p className="font-medium">{auth.user._id}</p>
-        </div>
         <div className="grid grid-cols-2 gap-4">
           <Button 
             variant="outline"
@@ -140,8 +148,22 @@ export default function ProfilePage() {
           <Button 
             variant="destructive"
             onClick={() => {
-              setAuth({ isAuthenticated: false, user: null });
-              window.location.href = '/login';
+              localStorage.clear("access_token");
+              setAuth({
+                isAuthenticated: false,
+                user:{
+                  email:  "",
+                  name:  "",
+                  _id: "", // delete userId when logout,
+                  role: ""
+                }
+              })
+              notification.success({
+                message: "LOGOUT",
+                description: "Success",
+              });
+              setCurrent("home");
+              navigate("/");
             }}
           >
             Logout

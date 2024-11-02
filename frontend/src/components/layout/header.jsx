@@ -1,9 +1,9 @@
-import { AppstoreOutlined, HomeOutlined, SettingOutlined, UsergroupAddOutlined, FormOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, HomeOutlined, SettingOutlined, UsergroupAddOutlined, FormOutlined, UserOutlined } from '@ant-design/icons';
 import { Menu, Button, Form, Input, notification } from 'antd';
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/auth.context';
-
+import '../../styles/header.css'
 const Header = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
@@ -26,7 +26,11 @@ const Header = () => {
       key: 'note',
       icon: <FormOutlined />,
     },] : []),
-    
+    {
+      label: <Link to={"profile"}>Profile</Link>,
+      key: 'profile',
+      icon: <UserOutlined/>
+    },
     {
       label: `Welcome ${auth?.user?.name ?? ""}`,
       key: 'SubMenu',
@@ -63,9 +67,6 @@ const Header = () => {
           },
         ]),
       ],
-    },{
-      label: <Link to={"profile"}>Profile</Link>,
-      key: 'profile',
     }
   ];
   const [current, setCurrent] = useState('mail');
@@ -73,6 +74,12 @@ const Header = () => {
     console.log('click ', e);
     setCurrent(e.key);
   };
-  return <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />;
+  return <Menu 
+                className='menu'
+                onClick={onClick} 
+                selectedKeys={[current]} 
+                mode="horizontal" 
+                items={items} 
+          />;
 };
 export default Header;
