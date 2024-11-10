@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import axios from '../src/util/axios.customize';
 import { AuthContext } from "./components/context/auth.context";
 import { Spin } from "antd";
-
+import { Toaster } from "@/components/ui/toaster";
 // function getPayload(jwt){
 //   // A JWT has 3 parts separated by '.'
 //   // The middle part is a base64 encoded JSON
@@ -57,6 +57,7 @@ const App = () =>{
     <>
       <Header/>
       <Outlet/>
+      <Toaster/>
     </>
     }
   </div>)
